@@ -118,7 +118,7 @@ func main() {
 						value = param
 					}
 
-					paramReplase := regexp.MustCompile(fmt.Sprintf("(@P%d)(?:[^0-9])", index))
+					paramReplase := regexp.MustCompile(fmt.Sprintf("(@P%d)(?:[^0-9])??", index))
 					// sql.SqlQuery = paramReplase.ReplaceAllString(sql.SqlQuery, value + " ")
 					sql.SqlQuery = paramReplase.ReplaceAllStringFunc(sql.SqlQuery, func (str string) string {
 						return strings.Replace(str, fmt.Sprintf("@P%d", index), value, -1)
