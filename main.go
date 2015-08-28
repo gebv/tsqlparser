@@ -59,6 +59,7 @@ func main() {
 	// Выбрали все SQL запросы с параметрами
 	var events = Events{}
 	var page = new(PageProfile)
+	var sqlTexts = []string{}
 	
 	reader := bytes.NewReader(data)
 
@@ -117,12 +118,19 @@ func main() {
 			}
 
 			page.SqlQueres = append(page.SqlQueres, sql)
+			sqlTexts = append(sqlTexts, fmt.Sprintf("-- Sq: #%d", _sqlSeqNumber))
+			sqlTexts = append(sqlTexts, fmt.Sprintf("-- SQLFormat: %s", sql.SqlFormat))
+			sqlTexts = append(sqlTexts, fmt.Sprintf("-- SQLParams: %s", sql.SqlParams))
+			sqlTexts = append(sqlTexts, sql.SqlQuery)
+			sqlTexts = append(sqlTexts, "")
+			sqlTexts = append(sqlTexts, "")
 		}
 	}
 
 	pageBytes, _ := json.Marshal(page)
 
 	ioutil.WriteFile(fmt.Sprintf("%s.sql_profiles.json", filePath), pageBytes, 0644)
+	ioutil.WriteFile(fmt.Sprintf("%s.sql_profiles.sql", filePath), []byte(strings.Join(sqlTexts, "\n")), 0644)
 	log.Println("Done")
 	
 }
