@@ -40,9 +40,11 @@ type SqlProfile struct {
 }
 
 var filePath string
+var pageName string
 
 func init() {
 	flag.StringVar(&filePath, "f", "", "path file")
+	flag.StringVar(&pageName, "title", "", "page name")
 }
 
 func main() {
@@ -59,7 +61,10 @@ func main() {
 	// Выбрали все SQL запросы с параметрами
 	var events = Events{}
 	var page = new(PageProfile)
-	var sqlTexts = []string{}
+	page.PageName = pageName
+	var sqlTexts = []string{
+		fmt.Sprintf("-- Page name: '%s'", pageName),
+	}
 	
 	reader := bytes.NewReader(data)
 
